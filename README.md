@@ -1,578 +1,459 @@
-# 🚀 ULTIMATE BUSINESS OS - DEPLOYMENT & HANDOFF GUIDE
+# 🤖 AI Agent Factory - Complete Setup Guide
 
-## 📦 WHAT YOU'VE GOT
+## 🌟 System Overview
 
-A production-ready **AI-powered business operations command center** with:
+The AI Agent Factory is a **fully automated** pipeline that builds custom security-focused local AI agents for businesses. From order placement to delivery, everything is handled by intelligent automation.
 
-- ✅ **Real-time dashboard** with live analytics
-- ✅ **AI agents** (Claude-powered) for automation
-- ✅ **Persistent data storage** (localStorage)
-- ✅ **Automated workflows** for orders, leads, and support
-- ✅ **Swarm deployment system** for AI sales agents
-- ✅ **Full React UI** with charts and visualizations
+### Core Capabilities
+
+- ✅ **Custom Agent DNA**: Select 3 expert traits from 10+ domains
+- ✅ **Knowledge Base Integration**: Upload business data/docs for agent training
+- ✅ **System Integrations**: Pre-built connectors for Slack, Salesforce, Stripe, etc.
+- ✅ **Automated Build Pipeline**: Zero-touch from order → build → test → delivery
+- ✅ **Docker Deployment**: Containerized agents ready to deploy
+- ✅ **$0 Marketing Spend**: AI-driven sales ops and bot swarms (separate system)
 
 ---
 
-## 🎯 QUICK START (5 Minutes)
+## 📁 Project Structure
 
-### Step 1: Deploy to Production
+```
+agent_factory/
+├── core/
+│   ├── agent_dna.py              # Expert trait system & DNA synthesis
+│   ├── data_pipeline.py          # Knowledge base creation & vector storage
+│   ├── integration_builder.py   # OAuth/API/webhook scaffolding
+│   ├── agent_builder.py          # Main build orchestrator
+│   └── delivery_workflow.py     # Order → delivery automation
+├── api_service.py                # REST API (FastAPI)
+├── requirements.txt              # Python dependencies
+├── docker-compose.yml            # Service orchestration
+├── Dockerfile                    # API container
+└── README.md                     # This file
+```
 
-**Option A: Deploy to Vercel (Recommended)**
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- Docker & Docker Compose
+- Anthropic API key
+
+### Installation
+
 ```bash
-# 1. Save the business-os.jsx file
-# 2. Go to https://vercel.com
-# 3. Click "New Project"
-# 4. Upload the file or connect your Git repo
-# 5. Deploy (auto-detects React)
+# 1. Clone/download the factory code
+cd agent_factory
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Set environment variables
+export ANTHROPIC_API_KEY="your_api_key_here"
+
+# 4. Start the API service
+python api_service.py
 ```
 
-**Option B: Deploy to Netlify**
+The API will be available at `http://localhost:8000`
+
+### Docker Deployment
+
 ```bash
-# 1. Go to https://netlify.com
-# 2. Drag and drop the business-os.jsx file
-# 3. Done! Live in 30 seconds
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or run standalone
+docker build -t agent-factory .
+docker run -p 8000:8000 -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY agent-factory
 ```
 
-**Option C: Run Locally**
+---
+
+## 🎯 API Endpoints
+
+### 1. Create Order
+
+**POST** `/orders`
+
+Submit a new agent build order.
+
 ```bash
-# Create a simple HTML wrapper
-cat > index.html << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Business OS</title>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-  <script type="text/babel" src="business-os.jsx"></script>
-  <script type="text/babel">
-    ReactDOM.render(<BusinessOS />, document.getElementById('root'));
-  </script>
-</body>
-</html>
-EOF
-
-# Open in browser
-python3 -m http.server 8000
-# Visit: http://localhost:8000
+curl -X POST http://localhost:8000/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer_id": "cust_123",
+    "customer_email": "customer@example.com",
+    "specifications": {
+      "agent_name": "SecureFinOps Assistant",
+      "traits": ["financial_analyst", "security_auditor", "operations_optimizer"],
+      "custom_context": "Specializes in fintech compliance and secure operations.",
+      "data_sources": [
+        {
+          "type": "text",
+          "name": "company_policies",
+          "content": "Our security policy requires 2FA for all transactions..."
+        }
+      ],
+      "integrations": ["slack", "salesforce", "stripe"]
+    }
+  }'
 ```
 
----
-
-## 🤖 AI AGENT SETUP
-
-### Enabling Claude API
-
-The app uses Claude Sonnet 4 for AI agents. **No API key needed** in the current setup (uses the browser's authenticated session).
-
-**For production with real API keys:**
-
-1. Get an Anthropic API key: https://console.anthropic.com
-2. Add to your environment:
-   ```javascript
-   // In business-os.jsx, update the AIAgent.callClaude function:
-   headers: {
-     "Content-Type": "application/json",
-     "x-api-key": "YOUR_ANTHROPIC_API_KEY",  // Add this line
-     "anthropic-version": "2023-06-01"       // Add this line
-   }
-   ```
-
-### Agent Capabilities
-
-**🎯 Overseer Agent**
-- Orchestrates all workflows
-- Analyzes orders, leads, and tickets
-- Routes tasks to specialized agents
-
-**📊 Vanguard Sales Agent**
-- Scores leads (0-100)
-- Deploys sales swarms
-- Creates outreach strategies
-- Analyzes pipeline performance
-
-**📦 Logos Operations Agent**
-- Processes orders
-- Optimizes delivery routes
-- Manages inventory
-- Generates fulfillment plans
-
----
-
-## 🔄 AUTOMATED WORKFLOWS
-
-### Workflow 1: Order Fulfillment Pipeline
-
-```
-New Order → Logos AI Analysis → Auto-Status Update → Fulfillment Plan
-```
-
-**How it works:**
-1. Order arrives in system
-2. Logos AI analyzes order details
-3. Creates fulfillment strategy
-4. Updates order status automatically
-5. Tracks through delivery
-
-**To trigger:**
-```javascript
-// In the app, click "AI Process" on any order
-runAutomation('order', orderData)
-```
-
-### Workflow 2: Sales Swarm Deployment
-
-```
-New Lead → Vanguard Scoring → Swarm Assignment → Auto-Outreach
-```
-
-**How it works:**
-1. Lead enters pipeline
-2. Vanguard AI scores lead (0-100)
-3. Assigns to appropriate swarm (Alpha/Beta/Gamma)
-4. Swarm begins outreach campaign
-5. Tracks engagement and conversion
-
-**To trigger:**
-```javascript
-// In the app, click "Deploy Swarm" on any lead
-deploySwarm(leadId)
-```
-
-### Workflow 3: Support Auto-Triage
-
-```
-Ticket Created → Sentiment Analysis → Priority Assignment → Auto-Route
-```
-
-**How it works:**
-1. Support ticket arrives
-2. AI analyzes sentiment and urgency
-3. Assigns priority (low/medium/high/critical)
-4. Routes to appropriate team
-5. Tracks resolution time
-
-**To trigger:**
-```javascript
-// In the app, processes tickets automatically
-runAutomation('ticket', ticketData)
-```
-
----
-
-## 💾 DATA PERSISTENCE
-
-### Current Setup (localStorage)
-
-All data persists in browser localStorage. Perfect for:
-- Single-user setups
-- Demos and prototypes
-- Quick deployments
-
-**Data is stored as:**
-```javascript
-localStorage.setItem('businessOS_data', JSON.stringify({
-  orders: [...],
-  leads: [...],
-  tickets: [...],
-  swarms: [...]
-}))
-```
-
-### Upgrading to Real Database
-
-**Option A: Firebase (Easiest)**
-```javascript
-// 1. Install Firebase
-npm install firebase
-
-// 2. Replace StorageManager with:
-import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-
-const firebaseConfig = { /* your config */ };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const StorageManager = {
-  async get(key) {
-    const docRef = doc(db, 'data', key);
-    const docSnap = await getDoc(docRef);
-    return docSnap.exists() ? docSnap.data() : null;
-  },
-  async set(key, value) {
-    await setDoc(doc(db, 'data', key), value);
-  }
-};
-```
-
-**Option B: Supabase (PostgreSQL)**
-```javascript
-// 1. Install Supabase
-npm install @supabase/supabase-js
-
-// 2. Replace StorageManager with:
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient('YOUR_URL', 'YOUR_KEY');
-
-const StorageManager = {
-  async get(key) {
-    const { data } = await supabase
-      .from('business_os')
-      .select('*')
-      .eq('key', key)
-      .single();
-    return data?.value;
-  },
-  async set(key, value) {
-    await supabase
-      .from('business_os')
-      .upsert({ key, value });
-  }
-};
-```
-
-**Option C: MongoDB (Full Control)**
-```javascript
-// Backend API route (Node.js/Express):
-const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
-
-app.post('/api/data/:key', async (req, res) => {
-  const db = await MongoClient.connect('mongodb://...');
-  await db.collection('data').updateOne(
-    { key: req.params.key },
-    { $set: { value: req.body } },
-    { upsert: true }
-  );
-  res.json({ success: true });
-});
-
-// In business-os.jsx:
-const StorageManager = {
-  async set(key, value) {
-    await fetch(`/api/data/${key}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(value)
-    });
-  }
-};
-```
-
----
-
-## 🎨 CUSTOMIZATION GUIDE
-
-### Branding
-
-```javascript
-// Update theme colors in business-os.jsx:
-const theme = {
-  bg: '#0a0e1a',           // Change to your dark background
-  accent: '#3b82f6',       // Change to your brand color
-  success: '#10b981',      // Change to your success color
-  // ... etc
-};
-```
-
-### Adding New Views
-
-```javascript
-// 1. Create new view component:
-const CustomView = () => (
-  <div>Your custom content here</div>
-);
-
-// 2. Add to navigation:
-<button onClick={() => setActiveView('custom')}>
-  Custom View
-</button>
-
-// 3. Add to render logic:
-{activeView === 'custom' && <CustomView />}
-```
-
-### Adding New Agent Types
-
-```javascript
-// In AIAgent object, add new agent:
-async yourAgent(action, data) {
-  const prompts = {
-    your_action: `Your custom prompt here: ${JSON.stringify(data)}`
-  };
-  return await this.callClaude(prompts[action], data);
+**Response:**
+```json
+{
+  "order_id": "ORD-A1B2C3D4",
+  "status": "received",
+  "message": "Order received and queued for processing",
+  "estimated_completion_minutes": 10
 }
-
-// Then call it:
-const result = await AIAgent.yourAgent('your_action', yourData);
 ```
 
 ---
 
-## 📊 ANALYTICS & MONITORING
+### 2. Check Order Status
 
-### Built-in Metrics
+**GET** `/orders/{order_id}`
 
-The dashboard tracks:
-- Total revenue
-- Active orders
-- Pipeline value
-- Lead scores
-- Support tickets
-- Swarm performance
-- Conversion rates
+Track build progress.
 
-### Adding Custom Metrics
-
-```javascript
-// In the analytics object:
-const analytics = {
-  // ... existing metrics
-  customMetric: data.yourData.reduce((sum, item) => sum + item.value, 0)
-};
-
-// Use in a StatCard:
-<StatCard 
-  icon={YourIcon} 
-  label="Custom Metric" 
-  value={analytics.customMetric}
-/>
+```bash
+curl http://localhost:8000/orders/ORD-A1B2C3D4
 ```
 
-### Integrating Real Analytics
-
-**Google Analytics:**
-```html
-<!-- Add to index.html <head> -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
-</script>
+**Response:**
+```json
+{
+  "order_id": "ORD-A1B2C3D4",
+  "status": "ready_for_delivery",
+  "build_job_id": "job_xyz789",
+  "delivery_url": "https://downloads.example.com/packages/delivery_ORD-A1B2C3D4.zip",
+  "error_message": null
+}
 ```
 
-**Mixpanel:**
-```javascript
-// In business-os.jsx:
-import mixpanel from 'mixpanel-browser';
-mixpanel.init('YOUR_TOKEN');
-
-// Track events:
-mixpanel.track('Order Processed', { orderId: order.id });
-mixpanel.track('Swarm Deployed', { swarmId: swarm.id });
-```
+**Status Values:**
+- `received` - Order validated and queued
+- `building` - Agent being constructed
+- `testing` - Running automated tests
+- `packaging` - Creating deployment package
+- `ready_for_delivery` - Download link ready
+- `delivered` - Customer has been notified
+- `failed` - Build error (see error_message)
 
 ---
 
-## 🔐 SECURITY CONSIDERATIONS
+### 3. List Available Traits
 
-### Authentication
+**GET** `/traits`
 
-Currently no auth (single-user mode). To add:
+View all expert traits you can select.
 
-**Option A: Auth0**
-```javascript
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-
-// Wrap app:
-<Auth0Provider domain="YOUR_DOMAIN" clientId="YOUR_CLIENT_ID">
-  <BusinessOS />
-</Auth0Provider>
-
-// In component:
-const { loginWithRedirect, logout, user } = useAuth0();
+```bash
+curl http://localhost:8000/traits
 ```
 
-**Option B: Firebase Auth**
-```javascript
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-
-const auth = getAuth();
-const provider = new GoogleAuthProvider();
-
-// Login:
-await signInWithPopup(auth, provider);
-```
-
-### API Security
-
-**Secure the Claude API calls:**
-```javascript
-// Create backend proxy:
-// /api/claude
-app.post('/api/claude', async (req, res) => {
-  // Verify user auth here
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    headers: {
-      'x-api-key': process.env.ANTHROPIC_API_KEY, // Keep key secret
-      'Content-Type': 'application/json'
+**Response:**
+```json
+{
+  "total_traits": 10,
+  "traits": {
+    "financial_analyst": {
+      "name": "Financial Analyst",
+      "domain": "finance",
+      "core_skills": ["financial modeling", "risk assessment", "market analysis"]
     },
-    body: JSON.stringify(req.body)
-  });
-  res.json(await response.json());
-});
-
-// In business-os.jsx:
-// Change fetch URL to '/api/claude' instead of direct Anthropic API
+    "security_auditor": {
+      "name": "Security Auditor",
+      "domain": "security",
+      "core_skills": ["vulnerability assessment", "compliance checking", "threat modeling"]
+    }
+    // ... 8 more traits
+  }
+}
 ```
 
 ---
 
-## 🚦 PRODUCTION CHECKLIST
+### 4. List Available Integrations
 
-- [ ] **Environment Variables Set**
-  - [ ] Anthropic API key (if using real backend)
-  - [ ] Database credentials
-  - [ ] Auth provider credentials
+**GET** `/integrations`
 
-- [ ] **Database Configured**
-  - [ ] Schema created
-  - [ ] Indexes added
-  - [ ] Backups enabled
+View all system integrations.
 
-- [ ] **Security Hardened**
-  - [ ] Authentication enabled
-  - [ ] API keys secured (not in frontend)
-  - [ ] CORS configured
-  - [ ] Rate limiting enabled
-
-- [ ] **Monitoring Setup**
-  - [ ] Error tracking (Sentry)
-  - [ ] Analytics (Google Analytics/Mixpanel)
-  - [ ] Uptime monitoring
-
-- [ ] **Performance Optimized**
-  - [ ] Code minified
-  - [ ] Images optimized
-  - [ ] CDN configured
-
----
-
-## 🎯 NEXT STEPS
-
-### Week 1: Foundation
-1. Deploy to production URL
-2. Connect real database
-3. Add authentication
-4. Set up error monitoring
-
-### Week 2: Integration
-1. Connect to real order system
-2. Integrate with CRM
-3. Hook up support ticketing
-4. Test all workflows end-to-end
-
-### Week 3: Optimization
-1. Tune AI prompts for your use case
-2. Customize swarm strategies
-3. Add custom reports
-4. Train team on the system
-
-### Week 4: Scale
-1. Add more agent types
-2. Create custom workflows
-3. Build mobile app (React Native)
-4. Expand automation coverage
-
----
-
-## 🆘 TROUBLESHOOTING
-
-### Common Issues
-
-**Problem: AI agents not responding**
-```javascript
-// Check browser console for errors
-// Verify Anthropic API is accessible
-// Check API key is valid (if using one)
+```bash
+curl http://localhost:8000/integrations
 ```
 
-**Problem: Data not persisting**
-```javascript
-// Check localStorage is enabled
-// Verify browser not in incognito mode
-// Check for quota exceeded errors
-```
-
-**Problem: Charts not rendering**
-```javascript
-// Verify recharts is loaded
-// Check browser console for errors
-// Try refreshing the page
-```
-
-### Getting Help
-
-- **Documentation**: https://docs.anthropic.com
-- **Community**: https://discord.gg/anthropic
-- **Support**: support@anthropic.com
-
----
-
-## 📝 ARCHITECTURE NOTES
-
-### Component Structure
-```
-BusinessOS (Main App)
-├── CommandView (Dashboard)
-├── OpsView (Order Management)
-├── SalesView (Pipeline Management)
-└── SwarmView (Agent Control)
-
-AI Agents
-├── Overseer (Orchestration)
-├── Vanguard (Sales)
-└── Logos (Operations)
-
-Data Layer
-├── StorageManager (Persistence)
-└── Mock Data Generators
-```
-
-### Data Flow
-```
-User Action → React State Update → AI Agent Call → 
-Response Processed → UI Updated → Data Persisted
-```
-
-### Workflow Engine
-```
-Trigger Event → Agent Analysis → Decision Tree → 
-Automated Action → Status Update → Notification
+**Response:**
+```json
+{
+  "total_integrations": 9,
+  "integrations": {
+    "slack": {
+      "system_name": "Slack",
+      "integration_type": "oauth",
+      "required_scopes": ["chat:write", "channels:read"]
+    },
+    "salesforce": {
+      "system_name": "Salesforce",
+      "integration_type": "oauth",
+      "required_scopes": ["api", "refresh_token"]
+    }
+    // ... 7 more integrations
+  }
+}
 ```
 
 ---
 
-## 🎉 YOU'RE READY!
+### 5. Webhook Endpoint
 
-Your Ultimate Business OS is **production-ready**. 
+**POST** `/webhook/order-placed`
 
-Deploy it, customize it, scale it. This is your command center.
+For integration with external systems (Stripe, Shopify, etc.)
 
-**Need help?** I'm here. Just ask.
+```bash
+curl -X POST http://localhost:8000/webhook/order-placed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer_id": "cust_456",
+    "customer_email": "webhook@example.com",
+    "specifications": {
+      "agent_name": "Sales Bot",
+      "traits": ["sales_enablement", "customer_support_specialist", "content_strategist"],
+      "integrations": ["hubspot"]
+    }
+  }'
+```
 
 ---
 
-**Built with:**
-- React 18
-- Recharts
-- Lucide Icons
-- Claude Sonnet 4 API
-- localStorage (default)
+## 🧬 Expert Traits Library
 
-**License:** MIT - Do whatever you want with it.
+Customers select **exactly 3 traits** from these domains:
 
-**Version:** 1.0.0 - Genesis Edition
+| Trait ID | Name | Domain | Best For |
+|----------|------|--------|----------|
+| `financial_analyst` | Financial Analyst | Finance | Financial modeling, risk assessment |
+| `content_strategist` | Content Strategist | Marketing | SEO, content planning, brand voice |
+| `code_reviewer` | Code Reviewer | Engineering | Code quality, security audits |
+| `data_scientist` | Data Scientist | Analytics | ML models, statistical analysis |
+| `customer_support_specialist` | Customer Support | Support | Ticket resolution, empathetic communication |
+| `sales_enablement` | Sales Enablement | Sales | Lead qualification, CRM management |
+| `security_auditor` | Security Auditor | Security | Vulnerability assessment, compliance |
+| `operations_optimizer` | Operations Optimizer | Operations | Process improvement, automation |
+| `legal_advisor` | Legal Advisor | Legal | Contract review, compliance guidance |
+| `product_manager` | Product Manager | Product | Roadmap planning, feature prioritization |
+
+---
+
+## 🔌 System Integrations
+
+Pre-built integration scaffolding for:
+
+- **Slack** - Team communication and notifications
+- **Salesforce** - CRM and customer data
+- **Google Drive** - Document access and storage
+- **HubSpot** - Marketing and sales automation
+- **Stripe** - Payment processing
+- **GitHub** - Code repository access
+- **Zendesk** - Customer support ticketing
+- **Asana** - Project management
+- **Generic Webhooks** - Custom event handling
+
+Each integration includes:
+- OAuth flow implementation
+- API wrapper functions
+- Authentication handling
+- Common endpoint methods
+
+---
+
+## 📦 What Gets Delivered
+
+When an order completes, the customer receives:
+
+### 1. Deployment Package
+```
+delivery_ORD-{order_id}/
+├── Dockerfile                    # Container configuration
+├── docker-compose.yml            # Service orchestration
+├── deployment_manifest.json      # Complete specifications
+├── README.md                     # Setup guide
+├── dna/
+│   └── agent_config.json         # Agent DNA and capabilities
+├── knowledge_base/
+│   └── knowledge_base.json       # Vector-embedded customer data
+└── integrations/
+    ├── slack_oauth.py            # Integration implementations
+    ├── stripe_oauth.py
+    └── integration_manifest.json
+```
+
+### 2. Quick Start Guide
+```bash
+# 1. Extract package
+unzip delivery_ORD-ABC123.zip
+cd delivery_ORD-ABC123
+
+# 2. Configure environment
+export ANTHROPIC_API_KEY="your_key"
+export AGENT_ID="agent_xyz"
+
+# 3. Deploy
+docker-compose up -d
+
+# 4. Test
+curl http://localhost:8000/health
+```
+
+### 3. Email Notifications
+
+Customers receive automated emails at:
+- Order received
+- Build started
+- Agent ready (with download link)
+- Failure (if any issues)
+
+---
+
+## 🔄 Automated Workflow
+
+```mermaid
+graph LR
+    A[Order Placed] --> B[Validate Specs]
+    B --> C[Create Build Job]
+    C --> D[Synthesize DNA]
+    D --> E[Ingest Data]
+    E --> F[Build Integrations]
+    F --> G[Run Tests]
+    G --> H[Package Deployment]
+    H --> I[Generate Download Link]
+    I --> J[Send Email]
+    J --> K[Customer Downloads]
+```
+
+**Timeline:** 5-10 minutes from order to delivery
+
+---
+
+## 🧪 Testing
+
+### Run Unit Tests
+```bash
+# Test individual components
+python -m pytest core/test_agent_dna.py
+python -m pytest core/test_data_pipeline.py
+python -m pytest core/test_integration_builder.py
+```
+
+### Test Complete Pipeline
+```bash
+# Full end-to-end test
+python core/agent_builder.py
+python core/delivery_workflow.py
+```
+
+### API Testing
+```bash
+# Start service
+python api_service.py
+
+# In another terminal
+curl http://localhost:8000/health
+curl http://localhost:8000/traits
+curl http://localhost:8000/integrations
+
+# Submit test order
+curl -X POST http://localhost:8000/orders \
+  -H "Content-Type: application/json" \
+  -d @test_order.json
+```
+
+---
+
+## 🎨 Next Steps: Command Center Dashboard
+
+To complete the **ultimate business OS**, you need the React-based command center dashboard with:
+
+1. **Operations Hub** - Real-time order tracking
+2. **Swarm Control** - Deploy/monitor sales agents
+3. **Analytics** - Build metrics and success rates
+4. **Customer Portal** - Self-service order management
+
+Would you like me to build that next? The dashboard will connect to this API and provide:
+
+- Live order status updates
+- Agent performance monitoring
+- Integration health checks
+- Bot swarm deployment interface
+- Advanced AI sales ops control center
+
+Let me know and I'll create the full-stack dashboard! 🚀
+
+---
+
+## 📝 Environment Variables
+
+```bash
+# Required
+ANTHROPIC_API_KEY=sk-ant-xxxxx
+
+# Optional
+WORKSPACE_DIR=/tmp/agent_factory
+API_HOST=0.0.0.0
+API_PORT=8000
+LOG_LEVEL=info
+MAX_CONCURRENT_BUILDS=3
+```
+
+---
+
+## 🛠 Customization
+
+### Add New Expert Traits
+
+Edit `core/agent_dna.py` and add to `TraitLibrary.TRAITS`:
+
+```python
+"custom_trait_id": ExpertTrait(
+    name="Your Trait Name",
+    domain="your_domain",
+    core_skills=["skill1", "skill2"],
+    system_prompt_fragment="Your capability description...",
+    tool_requirements=["tool1", "tool2"]
+)
+```
+
+### Add New Integrations
+
+Edit `core/integration_builder.py` and add to `IntegrationTemplates.TEMPLATES`:
+
+```python
+"your_system": {
+    "system_name": "Your System",
+    "integration_type": "oauth",
+    "endpoint_base": "https://api.yoursystem.com",
+    # ... see existing templates for structure
+}
+```
+
+---
+
+## 📞 Support
+
+For issues or questions:
+- Open an issue in your project repo
+- Email: support@youragentfactory.com
+- Docs: https://docs.youragentfactory.com
+
+---
+
+## 📄 License
+
+Proprietary - All Rights Reserved
